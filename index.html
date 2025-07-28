@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Raunak Pratap Singh | Portfolio</title>
+    <style>
+        /* General body styling */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif; /* Using Inter as per guidelines */
+            background-color: #000; /* Darker background for the overall page */
+            color: #fff;
+            display: flex;
+            flex-direction: column; /* Stack header and main content vertically */
+            min-height: 100vh;
+            box-sizing: border-box; /* Changed to border-box for consistent padding/margin behavior */
+            padding: 20px; /* Overall padding around the content */
+            gap: 20px; /* Space between header and main grid */
+            scroll-behavior: smooth; /* Ensure smooth scrolling for the whole page */
+        }
+
+        /* Header styling */
+        header {
+            background-color: rgba(28, 28, 28, 0.1); /* More translucent background */
+            backdrop-filter: blur(8px); /* Slightly more blur for frosted glass effect */
+            padding: 15px 30px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1200px; /* Max width for the header */
+            margin: 0 auto; /* Center the header */
+            box-sizing: border-box;
+            position: sticky; /* Make the header sticky */
+            top: 20px; /* Stick to 20px from the top */
+            z-index: 1000; /* Ensure it stays on top of other content */
+            transition: all 0.3s ease-in-out; /* Smooth transition for shrinking */
+        }
+
+        /* Styles for when the header is scrolled */
+        header.scrolled {
+            padding: 10px 20px; /* Smaller padding when scrolled */
+            border-radius: 8px; /* Slightly less rounded */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* More subtle shadow */
+        }
+
+        header.scrolled .header-left .name-title h1 {
+            font-size: 1.1rem; /* Smaller font for name */
+        }
+
+        header.scrolled .header-left .name-title p {
+            font-size: 0.7rem; /* Smaller font for title */
+        }
+
+        header.scrolled .header-nav a {
+            font-size: 0.8rem; /* Smaller font for nav links */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-left .logo-icon {
+            width: 30px;
+            height: 30px;
+            color: #4CAF50; /* Green logo */
+            transition: all 0.3s ease-in-out; /* Smooth transition for shrinking */
+        }
+
+        header.scrolled .header-left .logo-icon {
+            width: 25px; /* Smaller logo when scrolled */
+            height: 25px;
+        }
+
+        .header-left .logo-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        .header-left .name-title h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #fff;
+            transition: font-size 0.3s ease-in-out; /* Smooth transition for font size */
+        }
+
+        .header-left .name-title p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #bbb;
+            transition: font-size 0.3s ease-in-out; /* Smooth transition for font size */
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header-nav a {
+            color: #bbb;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: color 0.3s, background-color 0.3s, font-size 0.3s ease-in-out; /* Smooth transition for font size */
+        }
+
+        .header-nav a:hover,
+        .header-nav a.active {
+            color: #4CAF50;
+            background-color: #2a2a2a;
+        }
+
+        /* Main content grid layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Left column (profile/contact) 1 part, right column (projects/workflow) 2 parts */
+            grid-template-rows: auto auto; /* Two main rows for the grid */
+            gap: 20px; /* Space between grid columns and rows */
+            width: 100%;
+            max-width: 1200px; /* Max width for the main grid */
+            margin: 0 auto; /* Center the main grid */
+            flex-grow: 1; /* Allow main grid to take available space */
+        }
+
+        /* Card styling */
+        .card {
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Specific card styles */
+        .profile-card {
+            grid-column: 1 / 2; /* Occupy the first column */
+            grid-row: 1 / 2; /* First row in the left column */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-card .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #4CAF50;
+        }
+
+        .profile-card .status {
+            position: relative; /* Needed for pseudo-element positioning */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #333;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ccc;
+            margin-bottom: 15px;
+            overflow: hidden; /* Hide the overflow of the pseudo-element */
+        }
+
+        /* Glowing Border Animation */
+        .profile-card .status::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid transparent; /* Start with transparent border */
+            border-image: linear-gradient(to right, #4CAF50 0%, #3e8e41 50%, #4CAF50 100%); /* Green gradient */
+            border-image-slice: 1;
+            border-radius: 22px; /* Slightly larger than parent's border-radius */
+            z-index: -1; /* Behind the content */
+            animation: rotateBorder 3s linear infinite; /* Rotate animation */
+            filter: blur(2px); /* Glowing effect */
+            pointer-events: none; /* Ensure clicks pass through */
+        }
+
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-card .status .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            animation: blink 1.5s infinite alternate; /* Blinking animation */
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+
+        .profile-card h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .profile-card p.title {
+            margin: 0 0 20px 0;
+            font-size: 0.95rem;
+            color: #bbb;
+        }
+
+        .profile-card .about-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 20px;
+            text-align: left; /* Align text left within its container */
+        }
+
+        .profile-card .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: auto; /* Push buttons to the bottom */
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        }
+
+        .profile-card .action-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #2a2a2a;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            flex: 1; /* Allow buttons to grow and shrink */
+            min-width: 120px; /* Minimum width for buttons */
+        }
+
+        .profile-card .action-buttons a:hover {
+            background-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+
+        .profile-card .action-buttons a svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Combined Contact Section */
+        .contact-section {
+            grid-column: 1 / 2; /* Occupy the first column */
+            grid-row: 2 / 3; /* Second row in the left column */
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between location and socials */
+        }
+
+        .contact-section .location-card-inner {
+            position: relative; /* Needed for absolute positioning of overlay */
+            min-height: 200px; /* Ensure a minimum height for the map */
+            border-radius: 12px; /* Inherit border-radius from parent card */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Inherit shadow from parent card */
+            overflow: hidden; /* Hide anything outside the rounded corners */
+            flex-grow: 1; /* Allow it to grow */
+            display: flex; /* Use flex to contain iframe and button */
+            flex-direction: column; /* Stack map and button vertically */
+            justify-content: space-between; /* Push map and button to ends */
+        }
+
+        .contact-section .location-card-inner iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Remove iframe border */
+            border-radius: 12px; /* Match parent border-radius */
+            position: absolute; /* Position to fill parent */
+            top: 0;
+            left: 0;
+            z-index: 0; /* Ensure iframe is behind text/button */
+        }
+
+        .contact-section .view-map-button {
+            position: absolute; /* Position absolutely within .location-card-inner */
+            top: 15px; /* Distance from top */
+            left: 15px; /* Distance from left */
+            padding: 8px 12px; /* Smaller padding */
+            background-color: #2a2a2a; /* Changed to fully opaque dark background */
+            color: #fff; /* White text */
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem; /* Smaller font size */
+            transition: background-color 0.3s, transform 0.2s;
+            z-index: 2; /* Ensure button is above the map */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-section .view-map-button:hover {
+            background-color: #4CAF50; /* Green on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+
+        .contact-section .socials-card-inner {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Allow it to grow */
+        }
+
+        .contact-section .socials-card-inner h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            color: #fff;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .social-links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns for social links */
+            gap: 10px;
+        }
+
+        .social-link-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .social-link-item:hover {
+            background-color: #4CAF50;
+            transform: translateY(-3px);
+        }
+
+        .social-link-item .icon {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 10px;
+            color: #fff; /* White icons */
+        }
+        .social-link-item .icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        .social-link-item .label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .social-link-item .handle {
+            font-size: 0.75rem;
+            color: #bbb;
+            margin-top: 5px;
+        }
+
+        .projects-section {
+            grid-column: 2 / 3; /* Occupy the second column */
+            grid-row: 1 / 2; /* First row in the right column */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .projects-section h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.8rem;
+            color: #4CAF50;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted minmax for larger cards */
+            gap: 20px; /* Increased gap for better spacing */
+        }
+
+        .project-card {
+            background-color: #1e1e1e;
+            padding: 18px; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            display: flex; /* Use flexbox for content alignment */
+            flex-direction: column; /* Stack content vertically */
+            justify-content: space-between; /* Distribute space between title/description and button */
+            min-height: 250px; /* Increased min-height to accommodate more text */
+            overflow: hidden; /* Ensure content doesn't spill out */
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            font-size: 1.2rem; /* Adjusted font size for h3 */
+            margin: 0 0 8px 0; /* Reduced margin */
+            color: #fff;
+        }
+
+        .project-card p {
+            font-size: 0.9rem; /* Adjusted font size for p */
+            color: #bbb;
+            line-height: 1.5; /* Standard line height for readability */
+            flex-grow: 1; /* Allow description to take available space */
+            margin-bottom: 12px; /* Space before tech stack */
+            overflow: visible; /* Ensure text is visible */
+            text-overflow: clip; /* Ensure text is not clipped */
+        }
+
+        .project-card .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* Increased gap for tech stack items */
+            margin-top: auto; /* Push tech stack to the bottom before the button */
+            margin-bottom: 15px; /* Space between tech stack and button */
+        }
+
+        .project-card .tech-stack-item {
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px; /* Increased padding */
+            border-radius: 5px; /* Slightly larger border-radius */
+            font-size: 0.75rem; /* Adjusted font size for tech stack items */
+            white-space: nowrap; /* Prevent text wrapping inside the chip */
+            display: flex; /* Make it a flex container to align icon and text */
+            align-items: center; /* Vertically center icon and text */
+            gap: 5px; /* Small gap between icon and text */
+        }
+
+        .tech-stack-item svg {
+            width: 14px; /* Size for tech stack icons */
+            height: 14px;
+            fill: currentColor; /* Inherit color from parent */
+        }
+
+        .project-card .repo-button {
+            display: inline-flex; /* Use inline-flex to center content and allow padding */
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Increased gap for button content */
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px; /* Increased padding for button */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem; /* Adjusted font size for button */
+            transition: background-color 0.3s, transform 0.2s;
+            align-self: flex-start; /* Align button to the start (left) */
+        }
+
+        .project-card .repo-button:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+        }
+
+        .project-card .repo-button svg {
+            width: 18px; /* Adjusted icon size */
+            height: 18px; /* Adjusted icon size */
+            fill: currentColor;
+        }
+
+
+        .workflow-card {
+            grid-column: 2 / 3; /* Occupy the second column */
+            grid-row: 2 / 3; /* Second row in the right column */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workflow-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            color: #fff;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .workflow-item {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .workflow-item:hover {
+            background-color: #2a2a2a;
+        }
+
+        .workflow-item .icon {
+            width: 28px;
+            height: 28px;
+            color: #4CAF50; /* Green icons */
+        }
+        .workflow-item .icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        .workflow-item .text h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #fff;
+        }
+        .workflow-item .text p {
+            margin: 5px 0 0 0;
+            font-size: 0.8rem;
+            color: #bbb;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr; /* Single column layout on smaller screens */
+                grid-template-rows: auto; /* Reset rows for single column */
+            }
+            .profile-card, .contact-section, .projects-section, .workflow-card {
+                grid-column: 1 / -1; /* All cards span full width */
+                grid-row: auto; /* Reset row placement */
+            }
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                top: 10px; /* Adjust sticky top for smaller screens */
+            }
+            .header-nav {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .profile-card .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .profile-card .action-buttons a {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 550px) {
+            body {
+                padding: 10px;
+                gap: 10px;
+            }
+            header {
+                padding: 10px;
+            }
+            .header-left .name-title h1 {
+                font-size: 1.1rem;
+            }
+            .header-left .name-title p {
+                font-size: 0.7rem;
+            }
+            .header-nav a {
+                font-size: 0.8rem;
+                padding: 3px 8px;
+            }
+            .card {
+                padding: 15px;
+            }
+            .profile-card h2 {
+                font-size: 1.5rem;
+            }
+            .profile-card p.title {
+                font-size: 0.85rem;
+            }
+            .profile-card .about-text {
+                font-size: 0.8rem;
+            }
+            .profile-card .action-buttons a {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            .projects-section h2 {
+                font-size: 1.5rem;
+            }
+            .project-card h3 {
+                font-size: 1.1rem;
+            }
+            .project-card p {
+                font-size: 0.8rem;
+            }
+            .social-link-item .label {
+                font-size: 0.8rem;
+            }
+            .social-link-item .handle {
+                font-size: 0.7rem;
+            }
+            .workflow-item .text h4 {
+                font-size: 0.9rem;
+            }
+            .workflow-item .text p {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-icon">
+                <!-- Generic Cog/Gear Icon for a developer logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 20.06C12.67 20.02 12.34 20 12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 12.34 19.98 12.67 19.94 13L16 13V15L19.94 15C19.98 15.33 20 15.66 20 16C20 16.42 19.98 16.75 19.94 17L16 17V19L19.94 19C19.98 19.33 20 19.66 20 20H13ZM12 6C11.45 6 11 6.45 11 7V9H13V7C13 6.45 12.55 6 12 6ZM12 11C11.45 11 11 11.45 11 12V14H13V12C13 11.45 12.55 11 12 11Z"/>
+                </svg>
+            </div>
+            <div class="name-title">
+                <h1>Raunak Pratap Singh</h1>
+                <p>Software Developer</p>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <a href="#home-section" class="active">Home</a>
+            <a href="https://drive.google.com/file/d/1j3GbE9Z1bQHNgwlIqUcNhctuE4Azzt4I/view?usp=drive_link" target="_blank">Resume</a>
+            <a href="#projects-section">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <div class="main-grid">
+        <!-- Top Left: Profile / Home Card -->
+        <div class="card profile-card" id="home-section">
+            <img src="myphoto.jpg" alt="Photo of Raunak Pratap Singh" class="profile-photo">
+            <div class="status">
+                <span class="dot"></span> Available To Work
+            </div>
+            <h2>Raunak Pratap Singh</h2>
+            <p class="title">Web Developer</p>
+            <p class="about-text">I’m Raunak Pratap Singh, an aspiring software developer currently pursuing my B.Tech in Computer Science Engineering. I specialize in frontend/backend development using React.js and Node.js, and am certified in AI/ML through Microsoft Azure and Oracle Cloud. I am looking for opportunities to apply my knowledge in real-world tech projects and grow professionally.</p>
+
+            <div class="action-buttons">
+                <a href="mailto:raunakpratapsingh4510@gmail.com">
+                    <!-- Mail Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M22 4H2C0.9 4 0 4.9 0 6V18C0 19.1 0.9 20 2 20H22C23.1 20 24 19.1 24 18V6C24 4.9 23.1 4 22 4ZM21.6 6.3L12 12.5L2.4 6.3C2.2 6.1 2.1 5.8 2.1 5.5C2.1 5.2 2.2 4.9 2.4 4.7C2.6 4.5 2.9 4.4 3.2 4.4H20.8C21.1 4.4 21.4 4.5 21.6 4.7C21.8 4.9 21.9 5.2 21.9 5.5C21.9 5.8 21.8 6.1 21.6 6.3ZM22 18H2V7.4L12 13.6L22 7.4V18Z"/>
+                        </svg>
+                    Mail Me
+                </a>
+                <!-- WhatsApp Me button - assuming a WhatsApp link -->
+                <a href="https://wa.me/919319773555" target="_blank">
+                    <!-- WhatsApp Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12.04 2C7.34 2 3.58 5.76 3.58 10.46C3.58 12.08 4.01 13.61 4.78 14.96L3.19 20.21L8.62 18.64C9.88 19.34 11.41 19.7 12.04 19.7C16.74 19.7 20.5 15.94 20.5 11.24C20.5 6.54 16.74 2 12.04 2ZM16.58 15.08C16.34 15.5 15.06 15.94 14.82 16.06C14.58 16.18 14.34 16.22 13.92 16.1C13.5 15.98 12.42 15.62 11.1 14.54C9.78 13.46 8.86 12.18 8.58 11.76C8.3 11.34 8.22 11.1 8.46 10.68C8.70 10.26 9.02 9.78 9.26 9.54C9.50 9.30 9.62 9.22 9.74 9.46C9.86 9.70 9.98 9.98 10.06 10.18C10.14 10.38 10.22 10.54 10.14 10.78C10.06 11.02 9.94 11.14 9.70
+                    11.38C9.50 11.58 9.30 11.78 9.22 11.90C9.14 12.02 9.22 12.14 9.34 12.38C9.46 12.62 10.02 13.42 10.82 14.14C11.50 14.74 12.06 15.02 12.26 15.14C12.46 15.26 12.62 15.34 12.86 15.22C13.10 15.10 14.02 14.74 14.46 14.30C14.90 13.86 15.14 13.78 15.38 13.90C15.62 14.02 16.02 14.62 16.26 15.08Z"/>
+                    </svg>
+                    WhatsApp Me
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Column: Projects Section -->
+        <div class="card projects-section" id="projects-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px;">
+                <h2>Projects</h2>
+                <!-- "Built from Scratch" text as seen in the example -->
+                <span style="font-size: 0.9rem; color: #bbb;">Built from Scratch</span>
+            </div>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3>🏥 Hospital Inventory Management System</h3>
+                    <p>Hospital medicine inventory management with React, Express.js, and JSON. Features expiry alerts, stock tracking, and supplier management.</p>
+                    <div class="tech-stack">
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            React.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            Axios
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12C0 17.3 3.438 21.78 8.205 23.22C8.805 23.335 9 22.95 9 22.615V20.35C5.378 21.18 4.59 19.78 4.59 19.78C3.998 18.25 3.287 17.85 3.287 17.85C2.208 17.12 3.36 17.14 3.36 17.14C4.56 17.22 5.22 18.32 5.22 18.32C6.26 20.04 7.96 19.56 8.64 19.28C8.74 18.57 9.02 18.18 9.18 17.96C6.38 17.68 3.46 16.58 3.46 11.76C3.46 10.42 3.94 9.32 4.72 8.44C4.62 8.2 4.28 7.2 4.82 5.88C4.82 5.88 5.68 5.6 9 7.8C9.8 7.56 10.68 7.44 11.56 7.44C12.44 7.44 13.32 7.56 14.12 7.8C17.42 5.6 18.28 5.88 18.28 5.88C18.82 7.2 18.48 8.2 18.38 8.44C19.16 9.32 19.64 10.42 19.64 11.76C19.64 16.58 16.72 17.66 13.92 17.96C14.08 18.18 14.36 18.57 14.46 19.28C15.14 19.56 16.84 20.04 17.88 18.32C17.88 18.32 18.54 17.22 19.74 17.14C20.82 17.12 21.6 17.85 21.6 17.85C20.913 19.346 20.202 19.746 19.78 20.35C19.78 20.35 18.992 21.18 15.37 20.35V22.615C15.37 22.95 15.55 23.335 16.15 23.22C20.917 21.78 24 17.3 24 12C24 5.37 18.63 0 12 0Z"/></svg>
+                            CSS
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            Node.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C9.79 6 8 7.79 8 10V14C8 16.21 9.79 18 12 18C14.21 18 16 16.21 16 14V10C16 7.79 14.21 6 12 6ZM12 8C12.55 8 13 8.45 13 9V15C13 15.55 12.55 16 12 16C11.45 16 11 15.55 11 15V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            RESTful API
+                        </span>
+                    </div>
+                    <a href="https://github.com/RaunakPS/Inventory-management-system.git" target="_blank" class="repo-button">
+                        <!-- GitHub Icon SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 0C5.37 0 0 5.37 0 12C0 17.3 3.438 21.78 8.205 23.22C8.805 23.335 9 22.95 9 22.615V20.35C5.378 21.18 4.59 19.78 4.59 19.78C3.998 18.25 3.287 17.85 3.287 17.85C2.208 17.12 3.36 17.14 3.36 17.14C4.56 17.22 5.22 18.32 5.22 18.32C6.26 20.04 7.96 19.56 8.64 19.28C8.74 18.57 9.02 18.18 9.18 17.96C6.38 17.68 3.46 16.58 3.46 11.76C3.46 10.42 3.94 9.32 4.72 8.44C4.62 8.2 4.28 7.2 4.82 5.88C4.82 5.88 5.68 5.6 9 7.8C9.8 7.56 10.68 7.44 11.56 7.44C12.44 7.44 13.32 7.56 14.12 7.8C17.42 5.6 18.28 5.88 18.28 5.88C18.82 7.2 18.48 8.2 18.38 8.44C19.16 9.32 19.64 10.42 19.64 11.76C19.64 16.58 16.72 17.66 13.92 17.96C14.08 18.18 14.36 18.57 14.46 19.28C15.14 19.56 16.84 20.04 17.88 18.32C17.88 18.32 18.54 17.22 19.74 17.14C20.82 17.12 21.6 17.85 21.6 17.85C20.913 19.346 20.202 19.746 19.78 20.35C19.78 20.35 18.992 21.18 15.37 20.35V22.615C15.37 22.95 15.55 23.335 16.15 23.22C20.917 21.78 24 17.3 24 12C24 5.37 18.63 0 12 0Z"/>
+                        </svg>
+                        View Repository
+                    </a>
+                </div>
+
+                <!-- Project Card 2: Excel Analytics Platform -->
+                <div class="project-card">
+                    <h3>📊 Excel Analytics Platform</h3>
+                    <p>A full-stack MERN (MongoDB, Express.js, React.js, Node.js) web application developed as part of my internship. The platform is designed to upload, parse, and visualize Excel data with rich analytics and visual charts. It features a clean structure, real-time insights, and role-based access handling.</p>
+                    <div class="tech-stack">
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18H4V6H20V18ZM20 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4ZM12 13C10.8954 13 10 12.1046 10 11C10 9.89543 10.8954 9 12 9C13.1046 9 14 9.89543 14 11C14 12.1046 13.1046 13 12 13Z"/></svg>
+                            MongoDB Atlas
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            Express.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            React.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4ZM12 6C10.61 6 9.39 6.51 8.46 7.44C7.53 8.37 7.02 9.6 7.02 11C7.02 12.39 7.53 13.62 8.46 14.55C9.39 15.48 10.61 16 12 16C13.39 16 14.61 15.49 15.54 14.56C16.47 13.63 16.98 12.4 16.98 11C16.98 9.61 16.47 8.38 15.54 7.45C14.61 6.52 13.39 6 12 6ZM12 8C12.55 8 13 8.45 13 9V13H11V9C11 8.45 11.45 8 12 8Z"/></svg>
+                            Node.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11V3H18V11H16ZM12 18V3H14V18H12ZM8 13V3H10V13H8ZM4 20V3H6V20H4Z"/></svg>
+                            Chart.js
+                        </span>
+                        <span class="tech-stack-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM11 11V5H13V11H14.17L12 13.17L9.83 11H11ZM5 18H19V20H5V18Z"/></svg>
+                            Multer (file uploads)
+                        </span>
+                    </div>
+                    <a href="https://github.com/RaunakPS/Excel-Analytics-Platform.git" target="_blank" class="repo-button">
+                        <!-- GitHub Icon SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 0C5.37 0 0 5.37 0 12C0 17.3 3.438 21.78 8.205 23.22C8.805 23.335 9 22.95 9 22.615V20.35C5.378 21.18 4.59 19.78 4.59 19.78C3.998 18.25 3.287 17.85 3.287 17.85C2.208 17.12 3.36 17.14 3.36 17.14C4.56 17.22 5.22 18.32 5.22 18.32C6.26 20.04 7.96 19.56 8.64 19.28C8.74 18.57 9.02 18.18 9.18 17.96C6.38 17.68 3.46 16.58 3.46 11.76C3.46 10.42 3.94 9.32 4.72 8.44C4.62 8.2 4.28 7.2 4.82 5.88C4.82 5.88 5.68 5.6 9 7.8C9.8 7.56 10.68 7.44 11.56 7.44C12.44 7.44 13.32 7.56 14.12 7.8C17.42 5.6 18.28 5.88 18.28 5.88C18.82 7.2 18.48 8.2 18.38 8.44C19.16 9.32 19.64 10.42 19.64 11.76C19.64 16.58 16.72 17.66 13.92 17.96C14.08 18.18 14.36 18.57 14.46 19.28C15.14 19.56 16.84 20.04 17.88 18.32C17.88 18.32 18.54 17.22 19.74 17.14C20.82 17.12 21.6 17.85 21.6 17.85C20.913 19.346 20.202 19.746 19.78 20.35C19.78 20.35 18.992 21.18 15.37 20.35V22.615C15.37 22.95 15.55 23.335 16.15 23.22C20.917 21.78 24 17.3 24 12C24 5.37 18.63 0 12 0Z"/>
+                        </svg>
+                        View Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Left: Consolidated Contact Section (Location + Socials) -->
+        <div class="card contact-section" id="contact">
+            <div class="location-card-inner">
+                <!-- Google Maps Embed Iframe - Replaced with your actual embed URL -->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d472.3680850161487!2d77.29356687064279!3d28.49463351245154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1752989810741!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <!-- "View Larger Map" button positioned at top-left -->
+                <a href="https://www.google.com/maps/place/28.4946335,77.2935668" target="_blank" class="view-map-button">
+                    View Larger Map
+                </a>
+            </div>
+
+            <div class="socials-card-inner">
+                <h3>Socials</h3>
+                <div class="social-links-grid">
+                    <a href="mailto:raunakpratapsingh4510@gmail.com" class="social-link-item">
+                        <div class="icon">
+                            <!-- Gmail Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 4H2C0.9 4 0 4.9 0 6V18C0 19.1 0.9 20 2 20H22C23.1 20 24 19.1 24 18V6C24 4.9 23.1 4 22 4ZM21.6 6.3L12 12.5L2.4 6.3C2.2 6.1 2.1 5.8 2.1 5.5C2.1 5.2 2.2 4.9 2.4 4.7C2.6 4.5 2.9 4.4 3.2 4.4H20.8C21.1 4.4 21.4 4.5 21.6 4.7C21.8 4.9 21.9 5.2 21.9 5.5C21.9 5.8 21.8 6.1 21.6 6.3ZM22 18H2V7.4L12 13.6L22 7.4V18Z"/>
+                            </svg>
+                        </div>
+                        <span class="label">Email</span>
+                        <span class="handle">raunakpratapsingh4510@gmail.com</span>
+                    </a>
+                    <a href="https://linkedin.com/in/raunak-pratap-singh-2b8b26298" target="_blank" class="social-link-item">
+                        <div class="icon">
+                            <!-- LinkedIn Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452H15.811V13.065C15.811 11.284 15.156 10.05 13.56 10.05C12.306 10.05 11.644 10.916 11.644 12.637V20.452H7.01C7.01 20.452 7.042 7.009 7.01 7.009H11.644V9.01C11.644 9.01 11.644 9.01 11.644 9.01C12.298 7.79 13.916 6.772 16.035 6.772C18.99 6.772 20.447 8.654 20.447 12.51V20.452ZM3.947 5.76C2.937 5.76 2.11 4.922 2.11 3.892C2.11 2.863 2.937 2.025 3.947 2.025C4.957 2.025 5.784 2.863 5.784 3.892C5.784 4.922 4.957 5.76 3.947 5.76ZM2.11 20.452H5.784V7.009H2.11V20.452Z"/>
+                            </svg>
+                        </div>
+                        <span class="label">LinkedIn</span>
+                        <span class="handle">Raunak Pratap Singh</span>
+                    </a>
+                    <a href="https://instagram.com/your_instagram_handle" target="_blank" class="social-link-item">
+                        <div class="icon">
+                            <!-- Instagram Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7.8 2H16.2C19.4 2 22 4.6 22 7.8V16.2C22 19.4 19.4 22 16.2 22H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2ZM7.6 4C5.67 4 4 5.67 4 7.6V16.4C4 18.33 5.67 20 7.6 20H16.4C18.33 20 20 18.33 20 16.4V7.6C20 5.67 18.33 4 16.4 4H7.6ZM17.25 5.75C17.25 6.275 16.825 6.75 16.3 6.75C15.775 6.75 15.35 6.275 15.35 5.75C15.35 5.225 15.775 4.75 16.3 4.75C16.825 4.75 17.25 5.225 17.25 5.75ZM12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 9C13.654 9 15 10.346 15 12C15 13.654 13.654 15 12 15C10.346 15 9 13.654 9 12C9 10.346 10.346 9 12 9Z"/>
+                            </svg>
+                        </div>
+                        <span class="label">Instagram</span>
+                        <span class="handle">@your_insta_handle</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Right: Work Flow / Strategy Card -->
+        <div class="card workflow-card">
+            <h3>Work Flow & Strategy</h3>
+            <div class="workflow-list">
+                <div class="workflow-item">
+                    <div class="icon">
+                        <!-- Integration Icon SVG (e.g., gears) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 20.06C12.67 20.02 12.34 20 12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 12.34 19.98 12.67 19.94 13L16 13V15L19.94 15C19.98 15.33 20 15.66 20 16C20 16.42 19.98 16.75 19.94 17L16 17V19L19.94 19C19.98 19.33 20 19.66 20 20H13ZM12 6C11.45 6 11 6.45 11 7V9H13V7C13 6.45 12.55 6 12 6ZM12 11C11.45 11 11 11.45 11 12V14H13V12C13 11.45 12.55 11 12 11Z"/>
+                        </svg>
+                    </div>
+                    <div class="text">
+                        <h4>Integration</h4>
+                        <p>Seamlessly connecting various systems and APIs.</p>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <div class="icon">
+                        <!-- Frontend Development Icon SVG (e.g., code brackets) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.6 16.6L19.2 12L14.6 7.4L16 6L22 12L16 18L14.6 16.6ZM9.4 16.6L4.8 12L9.4 7.4L8 6L2 12L8 18L9.4 16.6Z"/>
+                        </svg>
+                    </div>
+                    <div class="text">
+                        <h4>Frontend Development</h4>
+                        <p>Building intuitive and responsive user interfaces.</p>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <div class="icon">
+                        <!-- Backend Development Icon SVG (e.g., database) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 18H4V6H20V18ZM20 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4ZM12 13C10.8954 13 10 12.1046 10 11C10 9.89543 10.8954 9 12 9C13.1046 9 14 9.89543 14 11C14 12.1046 13.1046 13 12 13Z"/>
+                        </svg>
+                    </div>
+                    <div class="text">
+                        <h4>Backend Development</h4>
+                        <p>Developing robust server-side logic and APIs.</p>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <div class="icon">
+                        <!-- Deployment Icon SVG (e.g., cloud) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04ZM19 18H6C3.79 18 2 16.21 2 14C2 11.79 3.79 10 6 10H7.5C8.06 7.83 9.87 6 12 6C14.88 6 17.2 8.24 17.5 11H19C20.66 11 22 12.34 22 14C22 15.66 20.66 17 19 17V18Z"/>
+                        </svg>
+                    </div>
+                    <div class="text">
+                        <h4>Deployment</h4>
+                        <p>Deploying applications to cloud platforms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for shrinking header on scroll
+        const header = document.querySelector('header');
+        const scrollThreshold = 50; // Pixels to scroll before header shrinks
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > scrollThreshold) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Optional: Smooth scrolling for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    // Calculate the offset to account for the sticky header
+                    const headerHeight = header.offsetHeight; // Get current height of the header
+                    const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const scrollPosition = offsetTop - headerHeight - 20; // 20px buffer below the header
+
+                    console.log('Target ID:', targetId);
+                    console.log('Target Element:', targetElement);
+                    console.log('Header Height:', headerHeight);
+                    console.log('Target Element Offset Top (relative to document):', offsetTop);
+                    console.log('Calculated Scroll Position:', scrollPosition);
+
+                    window.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.error('Target element not found:', targetId);
+                }
+
+
+                // Update active class for navigation
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Optional: Update active class on scroll
+        const sections = document.querySelectorAll('.main-grid .card[id]');
+        const navLinks = document.querySelectorAll('.header-nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                // Adjust sectionTop calculation for the sticky header and scroll-margin-top
+                // Using getBoundingClientRect().top for more accurate position relative to viewport
+                const rect = section.getBoundingClientRect();
+                const headerHeight = header.offsetHeight; // Get current header height
+                // Consider a section active if its top is within a certain range from the top of the viewport
+                // Adjusting for header height and a small buffer
+                if (rect.top <= headerHeight + 50 && rect.bottom > headerHeight + 50) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                // Check if the href contains the current section ID
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Set initial active state for Home on page load
+        window.addEventListener('load', () => {
+             const homeLink = document.querySelector('.header-nav a[href="#home-section"]');
+             if (homeLink) {
+                 homeLink.classList.add('active');
+             }
+        });
+
+    </script>
+
+</body>
+</html>

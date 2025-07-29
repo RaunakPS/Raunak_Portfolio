@@ -49,8 +49,6 @@ I’m **Raunak Pratap Singh**, an aspiring software developer currently pursuing
 - 📂 **Projects Showcase**  
   ![Projects Section](assets/projects-section.png)
 
-- 📱 **Mobile View**  
-  ![Mobile View](assets/mobile-view.png)
 
 ## 📁 Folder Structure
 
@@ -95,7 +93,7 @@ To use this work, contact me directly.
 
 ## 🙋‍♂️ Author
 
-Built with ❤️ by **Raunak Pratap Singh**
+Built by **Raunak Pratap Singh**
 
 ### 🔗 Connect with me:
 - [LinkedIn](https://www.linkedin.com/in/raunak-pratap-singh)
